@@ -29,6 +29,13 @@ public class CarListingsService {
         ));
     }
 
+    public void saveCarListings(List<CarListingJsonDto> carListings) {
+        carListings.stream().forEach(cl -> saveOrUpdateListing(
+                new CarListing(cl.getCode(), cl.getMake(), cl.getModel(), cl.getKw(),
+                        cl.getYear(), cl.getColor(), cl.getPrice())
+        ));
+    }
+
     private Long saveOrUpdateListing(CarListing carListing) {
         carListingRepository.findByDealerIdAndCode(carListing.getDealerId(), carListing.getCode()).stream()
                 .findAny().ifPresent(cl -> carListing.setId(cl.getId()));
@@ -36,7 +43,7 @@ public class CarListingsService {
     }
 
     public List<CarListingJsonDto> searchListings(String make, String model, Long year, String color) {
-        return carListingRepository.findAll().stream()
+        return carListingRepository.findByMakeOrModelOrYearOrColor(make, model, year, color).stream()
                 .map(cl -> new CarListingJsonDto(cl.getDealerId(), cl.getCode(),
                         cl.getMake(), cl.getModel(), cl.getKw(),
                         cl.getYear(), cl.getColor(), cl.getPrice()))

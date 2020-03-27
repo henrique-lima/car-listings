@@ -38,6 +38,16 @@ public class CarListing {
         this.price = price;
     }
 
+    public CarListing(String code, String make, String model, Long kw, Long year, String color, BigDecimal price) {
+        this.code = code;
+        this.make = make;
+        this.model = model;
+        this.kw = kw;
+        this.year = year;
+        this.color = color;
+        this.price = price;
+    }
+
     public Long getDealerId() {
         return dealerId;
     }

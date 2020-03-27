@@ -8,6 +8,7 @@ import com.hey.car.carlistings.service.CarListingsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -29,6 +30,7 @@ public class CarListingsController {
     @PostMapping(value = "/vehicle_listings", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public CarListingJsonDto[] saveListingsFromJson(@RequestBody CarListingJsonDto[] carListings) {
+        carListingsService.saveCarListings(Arrays.asList(carListings));
         return carListings;
     }
 
