@@ -25,6 +25,19 @@ public class CarListing {
     private String color;
     private BigDecimal price;
 
+    public CarListing() {}
+
+    public CarListing(Long dealerId, String code, String make, String model, Long kw, Long year, String color, BigDecimal price) {
+        this.dealerId = dealerId;
+        this.code = code;
+        this.make = make;
+        this.model = model;
+        this.kw = kw;
+        this.year = year;
+        this.color = color;
+        this.price = price;
+    }
+
     public Long getDealerId() {
         return dealerId;
     }
@@ -91,5 +104,9 @@ public class CarListing {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
