@@ -3,6 +3,7 @@ package com.hey.car.carlistings.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
+import java.time.Year;
 
 public class CarListingJsonDto {
 
@@ -12,12 +13,24 @@ public class CarListingJsonDto {
     private String model;
     @JsonProperty("kW")
     private Long kw;
-    private Long year;
+    private Year year;
     private String color;
     private BigDecimal price;
 
-    public CarListingJsonDto(Long dealerId, String code, String make, String model, Long kw, Long year, String color, BigDecimal price) {
+    public CarListingJsonDto() {}
+
+    public CarListingJsonDto(Long dealerId, String code, String make, String model, Long kw, Year year, String color, BigDecimal price) {
         this.dealerId = dealerId;
+        this.code = code;
+        this.make = make;
+        this.model = model;
+        this.kw = kw;
+        this.year = year;
+        this.color = color;
+        this.price = price;
+    }
+
+    public CarListingJsonDto(String code, String make, String model, Long kw, Year year, String color, BigDecimal price) {
         this.code = code;
         this.make = make;
         this.model = model;
@@ -67,11 +80,11 @@ public class CarListingJsonDto {
         this.kw = kw;
     }
 
-    public Long getYear() {
+    public Year getYear() {
         return year;
     }
 
-    public void setYear(Long year) {
+    public void setYear(Year year) {
         this.year = year;
     }
 

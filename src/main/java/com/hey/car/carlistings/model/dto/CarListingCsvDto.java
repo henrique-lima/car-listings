@@ -1,10 +1,19 @@
 package com.hey.car.carlistings.model.dto;
 
 import java.math.BigDecimal;
+import java.time.Year;
 
 public class CarListingCsvDto {
 
-    public CarListingCsvDto(String code, String make, String model, Long powerPs, Long year, String color, BigDecimal price) {
+    private String code;
+    private String make;
+    private String model;
+    private Long powerPs;
+    private Year year;
+    private String color;
+    private BigDecimal price;
+
+    public CarListingCsvDto(String code, String make, String model, Long powerPs, Year year, String color, BigDecimal price) {
         this.code = code;
         this.make = make;
         this.model = model;
@@ -13,14 +22,6 @@ public class CarListingCsvDto {
         this.color = color;
         this.price = price;
     }
-
-    private String code;
-    private String make;
-    private String model;
-    private Long powerPs;
-    private Long year;
-    private String color;
-    private BigDecimal price;
 
     public String getCode() {
         return code;
@@ -54,11 +55,11 @@ public class CarListingCsvDto {
         this.powerPs = powerPs;
     }
 
-    public Long getYear() {
+    public Year getYear() {
         return year;
     }
 
-    public void setYear(Long year) {
+    public void setYear(Year year) {
         this.year = year;
     }
 

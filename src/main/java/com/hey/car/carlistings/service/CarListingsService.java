@@ -7,6 +7,7 @@ import com.hey.car.carlistings.repository.CarListingRepository;
 import com.hey.car.carlistings.util.CarListingUtil;
 import org.springframework.stereotype.Service;
 
+import java.time.Year;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,17 +37,21 @@ public class CarListingsService {
         ));
     }
 
-    private Long saveOrUpdateListing(CarListing carListing) {
+    protected Long saveOrUpdateListing(CarListing carListing) {
         carListingRepository.findByDealerIdAndCode(carListing.getDealerId(), carListing.getCode()).stream()
-                .findAny().ifPresent(cl -> carListing.setId(cl.getId()));
+                .findFirst().ifPresent(cl -> carListing.setId(cl.getId()));
         return carListingRepository.save(carListing).getId();
     }
 
-    public List<CarListingJsonDto> searchListings(String make, String model, Long year, String color) {
+    public List<CarListingJsonDto> searchListings(String make, String model, Year year, String color) {
         return carListingRepository.findByMakeOrModelOrYearOrColor(make, model, year, color).stream()
                 .map(cl -> new CarListingJsonDto(cl.getDealerId(), cl.getCode(),
                         cl.getMake(), cl.getModel(), cl.getKw(),
                         cl.getYear(), cl.getColor(), cl.getPrice()))
                 .collect(Collectors.toList());
+    }
+
+    public List<CarListingJsonDto> searchListings() {
+        return this.searchListings(null, null, null, null);
     }
 }
