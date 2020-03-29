@@ -1,5 +1,6 @@
 package com.hey.car.carlistings.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -19,7 +20,8 @@ public class CarListingJsonDto {
 
     public CarListingJsonDto() {}
 
-    public CarListingJsonDto(Long dealerId, String code, String make, String model, Long kw, Year year, String color, BigDecimal price) {
+    @JsonCreator
+    public CarListingJsonDto(Long dealerId, @JsonProperty(required = true) String code, String make, String model, Long kw, Year year, String color, BigDecimal price) {
         this.dealerId = dealerId;
         this.code = code;
         this.make = make;

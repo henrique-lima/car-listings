@@ -1,22 +1,29 @@
 package com.hey.car.carlistings.model.dto;
 
+import com.opencsv.bean.CsvBindByName;
+
 import java.math.BigDecimal;
-import java.time.Year;
 
 public class CarListingCsvDto {
 
+    @CsvBindByName(required = true)
     private String code;
-    private String make;
-    private String model;
+    @CsvBindByName(column = "make/model")
+    private String makeModel;
+    @CsvBindByName(column = "power-in-ps")
     private Long powerPs;
-    private Year year;
+    @CsvBindByName(column = "year")
+    private Integer year;
+    @CsvBindByName(column = "color")
     private String color;
+    @CsvBindByName(column = "price")
     private BigDecimal price;
 
-    public CarListingCsvDto(String code, String make, String model, Long powerPs, Year year, String color, BigDecimal price) {
+    public CarListingCsvDto() {}
+
+    public CarListingCsvDto(String code, String makeModel, Long powerPs, Integer year, String color, BigDecimal price) {
         this.code = code;
-        this.make = make;
-        this.model = model;
+        this.makeModel = makeModel;
         this.powerPs = powerPs;
         this.year = year;
         this.color = color;
@@ -31,20 +38,12 @@ public class CarListingCsvDto {
         this.code = code;
     }
 
-    public String getMake() {
-        return make;
+    public String getMakeModel() {
+        return makeModel;
     }
 
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
+    public void setMakeModel(String makeModel) {
+        this.makeModel = makeModel;
     }
 
     public Long getPowerPs() {
@@ -55,11 +54,11 @@ public class CarListingCsvDto {
         this.powerPs = powerPs;
     }
 
-    public Year getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(Year year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

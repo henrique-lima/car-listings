@@ -8,26 +8,18 @@ import com.hey.car.carlistings.service.CarListingsService;
 import com.hey.car.carlistings.util.TestUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Year;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,8 +43,8 @@ public class CarListingsTest {
     }
 
     @Test
-    public void createListingsFromCsvTest() throws Exception {
-        String input = TestUtil.getDataFromFile("/static/listings.csv");
+    public void createListingsFromValidCsvTest() throws Exception {
+        String input = TestUtil.getDataFromFile("/static/listings_valid.csv");
 
         mockMvc.perform(
                 post("/upload_csv/1")
@@ -62,22 +54,36 @@ public class CarListingsTest {
 
         List<CarListingJsonDto> carListingsList = carListingsService.searchListings();
 
-        assertEquals(3, carListingsList.size());
+        assertEquals(4, carListingsList.size());
         assertEquals(1l, carListingsList.get(0).getDealerId());
         assertEquals("1", carListingsList.get(0).getCode());
         assertEquals("mercedes", carListingsList.get(0).getMake());
         assertEquals("a 180", carListingsList.get(0).getModel());
         assertEquals("2", carListingsList.get(1).getCode());
         assertEquals("audi", carListingsList.get(1).getMake());
-        assertNull(carListingsList.get(1).getModel());
+        assertEquals("a3", carListingsList.get(1).getModel());
         assertEquals("3", carListingsList.get(2).getCode());
         assertEquals(Year.of(2018), carListingsList.get(2).getYear());
         assertEquals("green", carListingsList.get(2).getColor());
+        assertEquals("4", carListingsList.get(3).getCode());
+        assertTrue(carListingsList.get(3).getPrice().intValue() == 16990);
+        assertEquals("red", carListingsList.get(3).getColor());
     }
 
     @Test
-    public void createListingsFromJsonTest() throws Exception {
-        String input = TestUtil.getDataFromFile("/static/listings.json");
+    public void createListingsFromInvalidCsvTest() throws Exception {
+        String input = TestUtil.getDataFromFile("/static/listings_invalid.csv");
+
+        mockMvc.perform(
+                post("/upload_csv/1")
+                        .contentType(new MediaType("text", "csv"))
+                        .content(input))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void createListingsFromValidJsonTest() throws Exception {
+        String input = TestUtil.getDataFromFile("/static/listings_valid.json");
 
         mockMvc.perform(
                 post("/vehicle_listings")
@@ -95,6 +101,17 @@ public class CarListingsTest {
         assertEquals(Year.of(2014), carListingsList.get(0).getYear());
         assertEquals("red", carListingsList.get(0).getColor());
         assertTrue(carListingsList.get(0).getPrice().intValue() == 13990);
+    }
+
+    @Test
+    public void createListingsFromInvalidJsonTest() throws Exception {
+        String input = TestUtil.getDataFromFile("/static/listings_invalid.json");
+
+        mockMvc.perform(
+                post("/vehicle_listings")
+                        .contentType(new MediaType("application", "json"))
+                        .content(input))
+                .andExpect(status().is(400));
     }
 
     @Test

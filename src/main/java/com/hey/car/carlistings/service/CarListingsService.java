@@ -7,6 +7,7 @@ import com.hey.car.carlistings.repository.CarListingRepository;
 import com.hey.car.carlistings.util.CarListingUtil;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Year;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,14 +23,17 @@ public class CarListingsService {
         this.carListingUtil = carListingUtil;
     }
 
+    @Transactional
     public void saveCarListings(Long dealerId, List<CarListingCsvDto> carListings) {
         carListings.stream().forEach(cl -> saveOrUpdateListing(
-                new CarListing(dealerId, cl.getCode(), cl.getMake(), cl.getModel(),
-                        carListingUtil.convertPsToKw(cl.getPowerPs()), cl.getYear(),
+                new CarListing(dealerId, cl.getCode(),
+                        carListingUtil.parseMake(cl.getMakeModel()), carListingUtil.parseModel(cl.getMakeModel()),
+                        carListingUtil.convertPsToKw(cl.getPowerPs()),Year.of(cl.getYear()),
                         cl.getColor(), cl.getPrice())
         ));
     }
 
+    @Transactional
     public void saveCarListings(List<CarListingJsonDto> carListings) {
         carListings.stream().forEach(cl -> saveOrUpdateListing(
                 new CarListing(cl.getCode(), cl.getMake(), cl.getModel(), cl.getKw(),

@@ -5,13 +5,11 @@ import com.hey.car.carlistings.model.dto.CarListingCsvDto;
 import com.hey.car.carlistings.model.dto.CarListingJsonDto;
 import com.hey.car.carlistings.repository.CarListingRepository;
 import com.hey.car.carlistings.util.CarListingUtil;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -21,8 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,10 +40,10 @@ public class CarListingsServiceTest {
 
     @Test
     public void shouldSaveCsvList() {
-        CarListingCsvDto carListingDto1 = new CarListingCsvDto("c1", "Renault", "4L",
-                150l, Year.of(1983), "white", new BigDecimal(9990));
-        CarListingCsvDto carListingDto2 = new CarListingCsvDto("c2", "Fiat", "Uno",
-                150l, Year.of(1990), "black", new BigDecimal(7990));
+        CarListingCsvDto carListingDto1 = new CarListingCsvDto("c1", "Renault/4L",
+                150l, 1983, "white", new BigDecimal(9990));
+        CarListingCsvDto carListingDto2 = new CarListingCsvDto("c2", "Fiat/Uno",
+                150l, 1990, "black", new BigDecimal(7990));
         List<CarListingCsvDto> carListingCsvDtoList = Arrays.asList(carListingDto1, carListingDto2);
 
         CarListing carListing1 = new CarListing(1l, "c1", "Renault", "4L",
@@ -56,6 +52,10 @@ public class CarListingsServiceTest {
                 110l, Year.of(1990), "black", new BigDecimal(7990));
 
         Mockito.doReturn(110l).when(carListingUtil).convertPsToKw(150l);
+        Mockito.doReturn("Renault").when(carListingUtil).parseMake("Renault/4L");
+        Mockito.doReturn("4L").when(carListingUtil).parseModel("Renault/4L");
+        Mockito.doReturn("Fiat").when(carListingUtil).parseMake("Fiat/Uno");
+        Mockito.doReturn("Uno").when(carListingUtil).parseModel("Fiat/Uno");
         Mockito.doReturn(1l).when(carListingsServiceSpy).saveOrUpdateListing(carListing1);
         Mockito.doReturn(2l).when(carListingsServiceSpy).saveOrUpdateListing(carListing2);
 
