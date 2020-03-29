@@ -8,11 +8,3 @@ COPY --from=builder /usr/src/app/target/$ARTIFACT_NAME /usr/app/$ARTIFACT_NAME
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/app/car-listings-0.0.1-SNAPSHOT.jar"]
 CMD java -jar $ARTIFACT_NAME
-
-#FROM maven:3-jdk-11
-#RUN mvn clean install
-#ARG JAR_FILE=target/*.jar
-#ENV ARTIFACT_NAME=car-listings
-#ENV ARTIFACT_VERSION=0.0.1-SNAPSHOT
-#COPY ${JAR_FILE} ${ARTIFACT_NAME}-${ARTIFACT_VERSION}.jar
-#CMD java -jar ${ARTIFACT_NAME}-${ARTIFACT_VERSION}.jar
